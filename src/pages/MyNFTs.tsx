@@ -80,6 +80,26 @@ export default function MyNFTs() {
         //navigate("/");
 
     }
+  async function filterEvent(){
+        const web3Modal = new Web3Modal()
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner()
+        
+        const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
+        //const data = await marketContract.fetchMyNFTs()
+  
+        const filter = {
+          address: nftmarketaddress,
+          fromBlock: 0,
+          toBlock: "latest",
+         // topics: [marketContract.interface.events.MarketItemCreated.topic]
+        };
+        const logs = await provider.getLogs(filter);
+        console.log(logs)
+
+  }
   // if (loadingState === 'loaded' && !nfts.length) return (<h1 className="py-10 px-20 text-3xl">No assets owned</h1>)
   // return (
   //   <div className="flex justify-center">
